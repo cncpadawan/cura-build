@@ -1,7 +1,7 @@
 
 ExternalProject_Add(Cura-PostProcessing
     GIT_REPOSITORY https://github.com/nallath/PostProcessingPlugin
-    GIT_TAG origin/3.1
+    GIT_TAG origin/master
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
 )
 
