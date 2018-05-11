@@ -40,6 +40,7 @@ build_options = {
         "stl",
         "Savitar",
         "PyQt5.QtDBus",
+        "Charon",
     ],
     "include_files": [
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine", ""),
@@ -60,7 +61,7 @@ build_options = {
 bdist_mac_options = {
     "iconfile": "@CMAKE_SOURCE_DIR@/packaging/cura.icns",
     "custom_info_plist": "@CMAKE_BINARY_DIR@/Info.plist",
-    "bundle_name": "Cura"
+    "bundle_name": "Ultimaker Cura"
 }
 
 executables = [
@@ -68,12 +69,12 @@ executables = [
 ]
 
 setup(
-    name = "Cura",
+    name = "Ultimaker Cura",
     version = "@CURA_VERSION_MAJOR@.@CURA_VERSION_MINOR@.@CURA_VERSION_PATCH@",
     description = "3D Printing Software",
     author = "Ultimaker B.V.",
     url = "http://software.ultimaker.com/",
-    license = "GNU AFFERO GENERAL PUBLIC LICENSE (AGPL)",
+    license = "GNU LESSER GENERAL PUBLIC LICENSE (LGPL)",
 
     options = {"build_exe": build_options, "bdist_mac": bdist_mac_options },
     executables = executables
