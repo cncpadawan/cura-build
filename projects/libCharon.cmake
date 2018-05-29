@@ -5,12 +5,11 @@ if(NOT BUILD_OS_WINDOWS)
     find_package(Qt5 5.6.0 REQUIRED Core Qml Quick Widgets)
 endif()
 find_package(PyQt 5.6 REQUIRED)
-find_package(SciPy 0.17 REQUIRED)
 
-ExternalProject_Add(Uranium
-    GIT_REPOSITORY https://github.com/ultimaker/Uranium
-    GIT_TAG origin/${URANIUM_BRANCH_OR_TAG}
+ExternalProject_Add(libCharon
+    GIT_REPOSITORY https://github.com/Ultimaker/libCharon
+    GIT_TAG origin/${LIBCHARON_BRANCH_OR_TAG}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
 )
 
-SetProjectDependencies(TARGET Uranium)
+SetProjectDependencies(TARGET libCharon)

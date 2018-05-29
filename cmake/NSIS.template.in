@@ -542,19 +542,19 @@ FunctionEnd
 !include "FileAssociation.nsh"
 
 Section /o "Open 3MF files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".3mf" "Cura.model.3MF"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".3mf" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "3MF model file"
 SectionEnd
 
 Section /o "Open OBJ files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".obj" "Cura.model.OBJ"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".obj" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.obj.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "OBJ model file"
 SectionEnd
 
 Section "Open STL files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".stl" "Cura.model.STL"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".stl" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.stl.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "STL model file"
 SectionEnd
 
 Section /o "Open X3D files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".x3d" "Cura.model.X3D"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".x3d" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.x3d.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "X3D model file"
 SectionEnd
 
 ;--------------------------------
@@ -745,9 +745,9 @@ Section "-Core installation"
 
   IntCmp $arduino_selected 0 +6
   ${If} ${RunningX64}
-    ExecWait '"$INSTDIR\arduino\dpinst64.exe" /lm /sw'
+    ExecWait '"$INSTDIR\arduino\dpinst-amd64.exe" /lm /sw'
   ${Else}
-    ExecWait '"$INSTDIR\arduino\dpinst32.exe" /lm /sw'
+    ExecWait '"$INSTDIR\arduino\dpinst-x86.exe" /lm /sw'
   ${EndIf}
 
 @CPACK_NSIS_EXTRA_INSTALL_COMMANDS@
@@ -863,10 +863,14 @@ Section "Uninstall"
 !endif
 
   ;Unregister file assiciations
-  ${UnRegisterExtension} ".3mf" "Cura.model.3MF"
-  ${UnRegisterExtension} ".obj" "Cura.model.OBJ"
-  ${UnRegisterExtension} ".stl" "Cura.model.STL"
-  ${UnRegisterExtension} ".x3d" "Cura.model.X3D"
+  ${UnRegisterExtension} ".3mf" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".obj" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.obj.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".stl" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.stl.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".x3d" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.x3d.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+
+  ;Remove executable from MuiCache
+  DeleteRegKey HKCR "Local Settings\Software\Microsoft\Windows\Shell\MuiCache\$INSTDIR\Cura.exe.ApplicationCompany"
+  DeleteRegKey HKCR "Local Settings\Software\Microsoft\Windows\Shell\MuiCache\$INSTDIR\Cura.exe.FriendlyAppName"
 
   ;Remove the uninstaller itself.
   Delete "$INSTDIR\Uninstall.exe"
@@ -981,6 +985,7 @@ _end_${_ID}:
 
 Function .onInit
   StrCmp "@CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL@" "ON" 0 inst
+  IfSilent inst 0
 
   !insertmacro uninstallVersion "Cura 14.12" "Cura_14.12.1" "14121"
   !insertmacro uninstallVersion "Cura 15.04" "Cura_15.04.4" "15044"
@@ -990,7 +995,13 @@ Function .onInit
   !insertmacro uninstallVersion "Cura 2.3" "Cura 2.3" "23"
   !insertmacro uninstallVersion "Cura 2.4" "Cura 2.4" "24"
   !insertmacro uninstallVersion "Cura 2.5" "Cura 2.5" "25"
-  !insertmacro uninstallVersion "Cura" "@CPACK_PACKAGE_INSTALL_REGISTRY_KEY@" "latest"
+  !insertmacro uninstallVersion "Cura 2.6" "Cura 2.6" "26"
+  !insertmacro uninstallVersion "Cura 2.7" "Cura 2.7" "27"
+  !insertmacro uninstallVersion "Cura 3.0" "Cura 3.0" "30"
+  !insertmacro uninstallVersion "Ultimaker Cura 3.0" "Ultimaker Cura 3.0" "U30" ; Name change during 3.0 release
+  !insertmacro uninstallVersion "Ultimaker Cura 3.1" "Ultimaker Cura 3.1" "U31"
+  !insertmacro uninstallVersion "Ultimaker Cura 3.2" "Ultimaker Cura 3.2" "U32"
+  !insertmacro uninstallVersion "Ultimaker Cura @CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "@CPACK_PACKAGE_INSTALL_REGISTRY_KEY@" "latest"
 
 inst:
 
